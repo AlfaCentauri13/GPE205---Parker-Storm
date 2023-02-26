@@ -1,21 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+[System.Serializable]
 public abstract class Controller : MonoBehaviour
 {
+    [HideInInspector]
+    public Pawn pawn;
 
-    public Pawn pawn; 
+    protected virtual void Start() { }
+    protected virtual void Awake() { }
 
-    // Start is called before the first frame update
-    public virtual void Start()
-    {
-        
-    }
+    protected virtual void Update(){   }
 
-    // Update is called once per frame
-    public virtual void Update()
-    {
-        
-    }
+    
+   
 }
