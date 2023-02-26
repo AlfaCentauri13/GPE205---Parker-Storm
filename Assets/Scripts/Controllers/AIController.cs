@@ -105,8 +105,6 @@ public class AIController : Controller
         {
             agent.SetDestination(player.transform.position); // set destination to player location
         }
-        
-        
     }
 
     private void AttackPlayer()

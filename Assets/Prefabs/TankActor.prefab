@@ -305,7 +305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 500
-  rotationSpeed: 90
+  modRotationSpeed: 90
+  defaultTankRotationSpeed: 90
   groundDrag: 5
   playerHeight: 1
   whatIsGround:
@@ -330,6 +331,7 @@ MonoBehaviour:
   rigidBody: {fileID: 9119213372537678746}
   rotationSpeed: 7
   fireKey: 32
+  collisionSphereRadius: 2
 --- !u!114 &7053860941462056620
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,8 +9,7 @@ public abstract class Controller : MonoBehaviour
 
     protected virtual void Start() { }
     protected virtual void Awake() { }
-
-    protected virtual void Update(){   }
+    protected virtual void Update(){ }
 
     
    
