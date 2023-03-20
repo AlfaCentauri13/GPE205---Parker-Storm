@@ -5,20 +5,7 @@ using UnityEngine;
 public class TankMovement : MonoBehaviour
 {
 
-    #region ALL THE VARIABLES!
-    public float groundDrag;
-
-    [Header("IsOnGround")]
-    public float playerHeight;
-    public LayerMask whatIsGround;
-    bool grounded;
-
-    public Transform orientation;
-    float horizontalInput;
-    float verticalInput;
-    Vector3 moveDirection;
-    Rigidbody rigidBody;
-
+    /* variables */
     [Header("Movement")]
     public float moveSpeed;
     public float rotationSpeed = 50f;
@@ -29,7 +16,19 @@ public class TankMovement : MonoBehaviour
     public LayerMask collisionFilter;
     float speedFact = 0;
 
-    #endregion ALL THE VARIABLES!
+
+    public float groundDrag;
+
+    [Header("IsOnGround")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    bool grounded;
+
+    public Transform orientation;
+    float horizontalInput;
+    float verticalInput;
+    // Vector3 moveDirection;
+    Rigidbody rigidBody;
 
     private void Start()
     {
@@ -41,24 +40,22 @@ public class TankMovement : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround); // used to check if we are on the ground
         bool hasCollided = Physics.CheckSphere(transform.position, collisionRadius, collisionFilter);
-
+        
         if (hasCollided)
         {
             RotationControl(true);
-
+            
         }
         else
         {
             RotationControl(false);
         }
-
-
+       
+        
         PlayerInput();
 
-        if (grounded) // apply friction if we are on the ground
-            rigidBody.drag = groundDrag;
-        else
-            rigidBody.drag = 0;
+        int drag = 4; 
+        rigidBody.drag = grounded ? groundDrag : drag;
 
         SpeedControl();
 
@@ -73,8 +70,8 @@ public class TankMovement : MonoBehaviour
     }
     public void RotationControl(bool SeeObject)
     {
-
-        if (SeeObject)
+        
+        if(SeeObject)
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, collisionRadius);
 
@@ -87,8 +84,8 @@ public class TankMovement : MonoBehaviour
                     Debug.Log("got layer");
                     float distanceFromObject = Vector3.Distance(transform.position, collider.gameObject.transform.position);
                     float speedFactor = (distanceFromObject / collisionRadius);
-                    speedFact = 1 / speedFactor;
-                    rotationSpeed = Mathf.Lerp(maxRotationSpeed, minRotationSpeed, 1 / speedFactor);
+                    speedFact = 1/speedFactor;
+                    rotationSpeed = Mathf.Lerp(maxRotationSpeed,minRotationSpeed, 1/speedFactor);  
                 }
             }
 
@@ -97,7 +94,7 @@ public class TankMovement : MonoBehaviour
         {
             speedFact = 0;
             rotationSpeed = Mathf.Lerp(maxRotationSpeed, minRotationSpeed, speedFact);
-
+            
         }
 
 
@@ -114,7 +111,7 @@ public class TankMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-
+       
         rigidBody.AddForce(rigidBody.transform.forward * (moveSpeed * 10f) * (verticalInput * Time.deltaTime), ForceMode.Force); // apply the calculate force
         rigidBody.transform.Rotate(Vector3.up, (rotationSpeed * horizontalInput) * Time.deltaTime); // at rotation to the tank based on horizontal input
     }
@@ -125,7 +122,7 @@ public class TankMovement : MonoBehaviour
 
         //limit velocity if needed
 
-        if (flatVel.magnitude > moveSpeed) // if the tanks velocity is greater than its set movement speed
+        if(flatVel.magnitude > moveSpeed) // if the tanks velocity is greater than its set movement speed
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed; // adjust tank speed to match move speed
             rigidBody.velocity = new Vector3(limitedVel.x, rigidBody.velocity.y, limitedVel.z); // limit the current velocity of the tank to the desired velocity set 

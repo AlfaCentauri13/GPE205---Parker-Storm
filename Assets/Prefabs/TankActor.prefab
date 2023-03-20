@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5717724028888183283}
   - component: {fileID: 8716352181165850198}
   - component: {fileID: 6850612102735301276}
-  - component: {fileID: 9064945955062905678}
+  - component: {fileID: 3614955558233637215}
   m_Layer: 7
   m_Name: TankObj
   m_TagString: Player
@@ -88,7 +88,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9064945955062905678
+--- !u!114 &3614955558233637215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 270155245996048018}
   - component: {fileID: 7053860941462056620}
   - component: {fileID: 7890763074858860164}
+  - component: {fileID: 776429973440921375}
   m_Layer: 7
   m_Name: TankActor
   m_TagString: Player
@@ -305,8 +306,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 500
-  modRotationSpeed: 90
-  defaultTankRotationSpeed: 90
+  rotationSpeed: 50
+  maxRotationSpeed: 50
+  minRotationSpeed: 20
+  detectedObjectForRotationMod: Obstacle
+  collisionFilter:
+    serializedVersion: 2
+    m_Bits: 512
   groundDrag: 5
   playerHeight: 1
   whatIsGround:
@@ -331,7 +337,6 @@ MonoBehaviour:
   rigidBody: {fileID: 9119213372537678746}
   rotationSpeed: 7
   fireKey: 32
-  collisionSphereRadius: 2
 --- !u!114 &7053860941462056620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,6 +364,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pawn: {fileID: 0}
+--- !u!114 &776429973440921375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9119213372537678745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04d085e5842bc8b4a9153cf1d03b4793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9119213372925028635
 GameObject:
   m_ObjectHideFlags: 0
