@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6135449872975323744
 MonoBehaviour:
@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9983aa14a5c5a4babd854ad9acce90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSeed: 0
-  mapOfTheDay: 1
   gridPrefabs:
   - {fileID: 121816, guid: 41d4243be8ad3a5409422171976de7ff, type: 3}
   - {fileID: 121816, guid: ada113183c1f09f4f998c3f8df9a229a, type: 3}

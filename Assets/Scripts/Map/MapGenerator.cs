@@ -1,63 +1,102 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-/// <summary>
-/// Generate a random room using an array of prefabs. 
-/// </summary>
-/// <returns></returns>
-[SerializeField]
+
 public class MapGenerator : MonoBehaviour
 {
+
+
+    public GameObject[] gridPrefabs;
+    public int rows;
+    public int cols;
+    public float roomWidth = 50;
+    public float roomHeight = 50;
+    public Room[,] grid;
     public int mapSeed;
     public bool mapOfTheDay;
-    public GameObject[] gridPrefabs;
-    public int rows, cols;
-    public float roomWidth, roomHeight = 50;
-    private Room[,] grid;
-  
-    [Obsolete]
-    void Start() => GenerateMap(); // generate the map on start
-    
-    // get random prefabs between 0 and the range using the length of the gridPrefabs we will generate soon
-    public GameObject RandomRoomPrefab() => gridPrefabs[UnityEngine.Random.Range(0, gridPrefabs.Length)];
+    public bool randomLevel;
 
-    // convert the current date to an integer. 
-    public int DateToInt(DateTime dateToUse) => dateToUse.Year + dateToUse.Month + dateToUse.Day + dateToUse.Hour + dateToUse.Minute + dateToUse.Second + dateToUse.Millisecond;
+
+
+    // Start is called before the first frame update
+    [Obsolete]
+    void Start()
+    {
+        
+        GenerateMap();
+        rows = GameManager.instance.rows;
+        cols = GameManager.instance.cols;
+        mapSeed = GameManager.instance.mapSeed;
+        mapOfTheDay = GameManager.instance.mapOfTheDay;
+        randomLevel = GameManager.instance.randomLevel;
+        StartCoroutine(GameManager.instance.SpawnPlayersCoroutine());
+        
+    }
+
+   
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    /// <summary>
+    /// Return a random room from array of prefabs
+    /// </summary>
+    /// <returns></returns>
+    public GameObject RandomRoomPrefab()
+    {
+        return gridPrefabs[UnityEngine.Random.Range(0, gridPrefabs.Length)];
+
+    }
+
+    public int DateToInt(DateTime dateToUse)
+    {
+        return dateToUse.Year + dateToUse.Month + dateToUse.Day + dateToUse.Hour + dateToUse.Minute + dateToUse.Second + dateToUse.Millisecond;
+    }
 
     [Obsolete]
     public void GenerateMap()
     {
-        // clear out the grid
+        //clear out the grid
         grid = new Room[cols, rows];
+        if(!mapOfTheDay)
+        {
+            UnityEngine.Random.seed = mapSeed;
+        }
+        else
+        {
+            UnityEngine.Random.seed = DateToInt(DateTime.Today);
+        }
+        if(randomLevel)
+        {
+            UnityEngine.Random.seed = DateToInt(DateTime.Now);
 
-        /*
-        If mapOfTheDay is true, the seed value will be different each time the game is played. 
-        This can be useful for generating different levels each day.
-        If mapOfTheDay is false, the seed value will be fixed, which can be useful for creating consistent levels across different play sessions.
-         */
-        UnityEngine.Random.seed = !mapOfTheDay ? mapSeed : DateToInt(DateTime.Now);
+        }
 
 
         for (int currentRow = 0; currentRow < rows; currentRow++)
         {
-            for (int currentCol = 0; currentCol < cols; currentCol++)
+            for(int currentCol = 0; currentCol < cols; currentCol++)
             {
 
                 #region Generation
+                //figure out location
 
-                // figure out the x and y position of the tiles. 
                 float xPos = roomWidth * currentCol;
                 float zPos = roomHeight * currentRow;
-                Vector3 newPos = new(xPos, 0, zPos);
+                Vector3 newPos = new Vector3(xPos, 0, zPos);
 
-                // create map tile
-                GameObject tempRoomObj = Instantiate(RandomRoomPrefab(), newPos, Quaternion.identity);
+                //create map tile
+                GameObject tempRoomObj = Instantiate(RandomRoomPrefab(), newPos, Quaternion.identity) as GameObject;
 
-                // set map tile parent
-                tempRoomObj.transform.parent = transform;
+                //set map tile parent
+                tempRoomObj.transform.parent = this.transform;
 
-                // give it a name
-                tempRoomObj.name = $"Room_{currentCol}, {currentRow}";
+                //give it a name
+                tempRoomObj.name = "Room_" + currentCol + ", " + currentRow;
 
                 // get room obj
                 Room tempRoom = tempRoomObj.GetComponent<Room>();
@@ -67,49 +106,47 @@ public class MapGenerator : MonoBehaviour
                 #endregion Generation
 
                 #region Doors
-
                 // open doors
                 // if bottom row open north door
-                switch (currentRow)
+                if(currentRow == 0)
                 {
-                    case 0:
-                        tempRoom.doorNorth.SetActive(false);
+                    tempRoom.doorNorth.SetActive(false);
 
-                        break;
-                    default:
-                        if (currentRow != rows - 1)
-                        {
-                            tempRoom.doorNorth.SetActive(false);
-                            tempRoom.doorSouth.SetActive(false);
-                        }
-                        else
-                        {
-                            tempRoom.doorSouth.SetActive(false);
-                        }
-
-                        break;
                 }
-                switch (currentCol)
+
+                else if (currentRow == rows - 1)
                 {
-                    case 0:
-                        tempRoom.doorEast.SetActive(false);
+                    tempRoom.doorSouth.SetActive(false);
+                }
+                else
+                {
+                    tempRoom.doorNorth.SetActive(false);
+                    tempRoom.doorSouth.SetActive(false);
+                }
+                if (currentCol == 0)
+                {
+                    tempRoom.doorEast.SetActive(false);
 
-                        break;
-                    default:
-                        if (currentCol != cols - 1)
-                        {
-                            tempRoom.doorEast.SetActive(false);
-                            tempRoom.doorWest.SetActive(false);
-                        }
-                        else
-                        {
-                            tempRoom.doorWest.SetActive(false);
-                        }
+                }
 
-                        break;
+                else if (currentCol == cols - 1)
+                {
+                    tempRoom.doorWest.SetActive(false);
+                }
+                else
+                {
+                    tempRoom.doorEast.SetActive(false);
+                    tempRoom.doorWest.SetActive(false);
                 }
 
                 #endregion Doors
+
+
+
+
+
+
+
             }
         }
     }
